@@ -3,7 +3,7 @@ import Column from "./Column";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     backgroundColor: "ghostwhite",
     alignItems: "center",
     justifyContent: "space-around",
@@ -13,14 +13,14 @@ export default StyleSheet.create({
     }),
   },
   box: {
-    width: 100,
     justifyContent: "center",
-    alignSelf: "stretch",
     alignItems: "center",
     backgroundColor: "lightgray",
     borderWidth: 1,
     borderStyle: "dashed",
     borderColor: "darkslategray",
+    height: 100,
+    width: 100,
   },
   boxText: {
     color: "darkslategray",
@@ -31,5 +31,13 @@ column: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-around",
+    alignSelf: "stretch",
+},
+row:{
+    flex:1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    alignSelf: "stretch",
 }
 });
