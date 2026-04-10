@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { View, Text, TextInput} from "react-native";
 import styles from "./styles";
 import Input from "./Input";
-
 import SubmitModal from "./SubmitModal";
 
 
@@ -32,6 +31,7 @@ export default function Planets() {
         onPressConfirm={toggleModal}
         onPressCancel={toggleModal}
         message = {searchText}
+        transparent = {true}
       />
 
     <Text onPress = {toggleModal}>Submit</Text>

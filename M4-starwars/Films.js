@@ -31,6 +31,7 @@ export default function Films() {
         onPressConfirm={toggleModal}
         onPressCancel={toggleModal}
         message = {searchText}
+        transparent = {true}
       />
 
     <Text onPress = {toggleModal}>Submit</Text>

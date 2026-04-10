@@ -26,20 +26,29 @@ export default StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    padding: 10,
-    alignSelf: "center",
-    margin: "auto",
-    paddingTop: 100,
+    alignItems: "center"
   },
   modalInner: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
+    alignSelf:"center",
+    justifySelf: "center",
+    alignItems: "center",
+    padding: 20,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 2,
+    height: 150,
+    backgroundColor: "lightblue"
+  },
+  modalButtonContainer:{
+    flex:1,
+    flexDirection:"row",
+    justifyContent:"space-between"
   },
   modalButton: {
-    margin: 15,
+    margin: 10,
+  },
+  modalText:{
+    fontWeight:"bold",
+    fontSize:16
   }
 });
