@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList} from "react-native";
+import { View, Text, FlatList, ScrollView} from "react-native";
 import styles from "./styles";
+import Swipeable from "./Swipeable";
+import SwipeModal from "./SwipeModel";
 
 
-export default function Spaceships() {
+export default function Spaceships({ navigation }) {
 
+  const [modalVisible, setModalVisible] = useState(false);
   const [spaceships, setSpaceships] = useState([]);
-
+  const [itemName, setItemName] = useState();
   
   useEffect(() => {
     getSpaceships()    
@@ -24,13 +27,35 @@ export default function Spaceships() {
       })
   }
 
+  function toggleModal() {
+    setModalVisible(!modalVisible);
+  }
+
+  function onSwipe(name) {
+    return () => {
+      toggleModal();
+      setItemName(name);
+    };
+  }
+
   return (
     <View style={styles.container}>
+     <ScrollView style = {styles.scroll}>
       <FlatList data = {spaceships} 
         renderItem = {({item}) => 
-          <View style = {styles.itemView}>
+          <Swipeable name = {item.name} key = {item.result} onSwipe = {onSwipe(item.name)}>
             <Text style = {styles.item} >{item.name}</Text>
-          </View>}/>
+          </Swipeable>}/>
+        </ScrollView>
+
+        <SwipeModal
+        animationType="fade"
+        visible={modalVisible}
+        onPressConfirm={toggleModal}
+        onPressCancel={toggleModal}
+        message = {itemName}
+        transparent = {true}
+      />
     </View>
 );
 }
