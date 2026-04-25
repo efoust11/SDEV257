@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, ScrollView} from "react-native";
 import styles from "./styles";
 import Swipeable from "./Swipeable";
-import SwipeModal from "./SwipeModel";
+import DetailsModal from "./DetailsModel";
 import LazyImage from "./LazyImage";
-import Input from "./Input";
 import NetInfo from "@react-native-community/netinfo";
 
 const connectedMap = {
@@ -15,18 +14,21 @@ const connectedMap = {
   mobile: "Connected",
 };
 
-export default function Planets() {
+export default function Films({ navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [films, setFilms] = useState([]);
 
-  const [planets, setPlanets] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [itemName, setItemName] = useState();
+  const [title, setTitle] = useState();
+  const [producer, setProducer] = useState();
+  const [director, setDirector] = useState();
+  const [releaseDate, setReleaseDate] = useState();
+  const [openingCrawl, setOpeningCrawl] = useState();
+  
+  const [source, setsource] = useState(null);
 
   const [networkTextVisible, setNetworkTextVisible] = useState(false);
   const [connected, setConnected] = useState("");
-
-  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     function onNetworkChange(connection) {
@@ -45,25 +47,22 @@ export default function Planets() {
       unsubscribe();
       };
     }, []);
-
-
-  const [source, setsource] = useState(null);
   
   useEffect(() => {
-    getPlanets();
+    getFilms();
     //public domain image
-    setsource(require("./assets/planets.jpg"));    
+    setsource(require("./assets/stars.jpg"));     
   }, [])
 
-  const getPlanets = () => {
-    const URL = "https://www.swapi.tech/api/planets";
+  const getFilms = () => {
+    const URL = "https://www.swapi.tech/api/films";
 
     fetch(URL)
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        setPlanets(data.results);
+        setFilms(data.result);
       })
   }
 
@@ -71,65 +70,47 @@ export default function Planets() {
     setModalVisible(!modalVisible);
   }
 
-  function onSwipe(name) {
+  function onSwipe(title, producer, director, release_date, opening_crawl) {
     return () => {
       toggleModal();
-      setItemName(name);
+      setTitle(title);
+      setProducer(producer);
+      setDirector(director);
+      setReleaseDate(release_date);
+      setOpeningCrawl(opening_crawl);
     };
   }
 
-  function searchFilter(text){
-    setSearchText(text);
-    setFiltered([]);
-    const newArray = [];
-    //console.log(text)
-    //console.log(planets)
-    if(text == ""){
-      setFiltered(planets);
-    }else{
-      for(const item in planets){
-      if(planets[item].name.includes(searchText)){
-        console.log(filtered);
-        newArray.push(planets[item]);
-      }
-    }
-    setFiltered(newArray);
-    }
-    
-  }
-
   return (
     <View style={styles.container}>
-      {networkTextVisible && <Text style = {styles.connection}>No Connection Detected</Text>}
-      <LazyImage
+    {networkTextVisible && <Text style = {styles.connection}>No Connection Detected</Text>}
+    <LazyImage
         style={{ width: 200, height: 150, marginTop: 10, marginBottom: 10 }}
         resizeMode="contain"
         source={source}
       />
-      <Input 
-        placeholder = "Search"
-        onChangeText = {(e) => {
-          searchFilter(e);
-        }}
-      />
-      <ScrollView style = {styles.scroll}>
-        <FlatList data = {filtered} 
-          renderItem = {({item}) => 
-            <Swipeable name = {item.name} key = {item.id} onSwipe = {onSwipe(item.name)}>
-              <Text style = {styles.item} >{item.name}</Text>
-            </Swipeable>}/>
-      </ScrollView>
+     <ScrollView style = {styles.scroll}>
+      <FlatList data = {films} 
+        renderItem = {({item}) => 
+          <Swipeable name = {item.properties.title} key = {item.result} 
+            onSwipe = {onSwipe(
+              item.properties.title, item.properties.producer, item.properties.director, item.properties.release_date, item.properties.opening_crawl
+              )}>
+            <Text style = {styles.item} >{item.properties.title}</Text>
+          </Swipeable>}/>
+        </ScrollView>
 
-      
-      <SwipeModal
+        <DetailsModal
         animationType="fade"
         visible={modalVisible}
         onPressConfirm={toggleModal}
-        message = {itemName}
+        title = {title}
+        producer = {producer}
+        director = {director}
+        release_date = {releaseDate}
+        opening_crawl = {openingCrawl}
         transparent = {false}
       />
-
-      
     </View>
 );
 }
