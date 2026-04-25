@@ -1,0 +1,36 @@
+import React from "react";
+import { View, Text, Modal } from "react-native";
+import styles from "./styles";
+import Animated, { SlideInLeft } from "react-native-reanimated";
+
+export default function DetailsModal(props) {
+  return (
+    
+    <Modal {...props}>
+    
+      <View style={styles.modalContainer}>
+      <Animated.View entering = {SlideInLeft} >
+        <View style={styles.detailInner}>
+        
+          <Text style={styles.detailTitle}>{props.title}</Text>
+          <Text style = {styles.detailText}>Produced by: {props.producer}</Text>
+          <Text style = {styles.detailText}>Directed by: {props.director}</Text>
+          <Text style = {styles.detailText}>Release Date: {props.release_date}</Text>
+          <Text style = {styles.detailText}>{props.opening_crawl}</Text>
+
+          <View style = {styles.modalButtonContainer}>
+          <Text style={styles.detailButton} onPress={props.onPressConfirm}>
+            Go Back
+          </Text>
+          </View>
+        </View>
+        </Animated.View>
+      </View>
+    </Modal>
+    
+  );
+}
+
+DetailsModal.defaultProps = {
+  onRequestClose: () => {},
+};
