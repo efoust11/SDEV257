@@ -4,6 +4,7 @@ import styles from "./styles";
 import Swipeable from "./Swipeable";
 import SwipeModal from "./SwipeModel";
 import LazyImage from "./LazyImage";
+import Input from "./Input";
 import NetInfo from "@react-native-community/netinfo";
 
 const connectedMap = {
@@ -19,10 +20,13 @@ export default function Planets() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [planets, setPlanets] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [itemName, setItemName] = useState();
 
   const [networkTextVisible, setNetworkTextVisible] = useState(false);
   const [connected, setConnected] = useState("");
+
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     function onNetworkChange(connection) {
@@ -60,6 +64,7 @@ export default function Planets() {
       })
       .then((data) => {
         setPlanets(data.results);
+        setFiltered(data.results);
       })
   }
 
@@ -74,6 +79,23 @@ export default function Planets() {
     };
   }
 
+  function searchFilter(text){
+    setFiltered([]);
+    const newArray = [];
+    if(text == ""){
+      setFiltered(planets);
+    }else{
+      setFiltered([])
+      for(const item in planets){
+      if((planets[item].name).toLowerCase().includes(searchText.toLowerCase())){
+        newArray.push(planets[item]);
+      }
+    }
+    setFiltered(newArray);
+    }
+    
+  }
+
   return (
     <View style={styles.container}>
       {networkTextVisible && <Text style = {styles.connection}>No Connection Detected</Text>}
@@ -82,8 +104,21 @@ export default function Planets() {
         resizeMode="contain"
         source={source}
       />
+      <View style = {styles.searchBar}>
+      <Input 
+        placeholder = "Search"
+        onChangeText = {(e) => {
+          setSearchText(e);
+        }}
+        style = {styles.searchBox}
+      />
+      <Text onPress = {() => {
+        searchFilter(searchText);
+      }}
+        style = {styles.searchButton}>Search</Text>
+      </View>
       <ScrollView style = {styles.scroll}>
-        <FlatList data = {planets} 
+        <FlatList data = {filtered} 
           renderItem = {({item}) => 
             <Swipeable name = {item.name} key = {item.id} onSwipe = {onSwipe(item.name)}>
               <Text style = {styles.item} >{item.name}</Text>
@@ -96,7 +131,7 @@ export default function Planets() {
         visible={modalVisible}
         onPressConfirm={toggleModal}
         message = {itemName}
-        transparent = {true}
+        transparent = {false}
       />
 
       

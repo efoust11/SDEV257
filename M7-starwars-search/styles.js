@@ -93,5 +93,26 @@ export default StyleSheet.create({
     padding: 5,
     marginLeft: "auto",
     marginRight: "auto"
+  },
+  searchBar:{
+    flexDirection: "row",
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "space-bewteen"
+  },
+  searchBox: {
+    borderColor: "black",
+    borderWidth: 2,
+    margin: 5
+  },
+  searchButton: {
+    backgroundColor: "azure",
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: "slategrey",
+    height: 30,
+    padding: 5,
+    marginLeft: "auto",
+    marginRight: "auto"
   }
 });
