@@ -4,7 +4,6 @@ import styles from "./styles";
 import Swipeable from "./Swipeable";
 import SwipeModal from "./SwipeModel";
 import LazyImage from "./LazyImage";
-import Input from "./Input";
 import NetInfo from "@react-native-community/netinfo";
 
 const connectedMap = {
@@ -20,13 +19,10 @@ export default function Planets() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [planets, setPlanets] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [itemName, setItemName] = useState();
 
   const [networkTextVisible, setNetworkTextVisible] = useState(false);
   const [connected, setConnected] = useState("");
-
-  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     function onNetworkChange(connection) {
@@ -78,26 +74,6 @@ export default function Planets() {
     };
   }
 
-  function searchFilter(text){
-    setSearchText(text);
-    setFiltered([]);
-    const newArray = [];
-    //console.log(text)
-    //console.log(planets)
-    if(text == ""){
-      setFiltered(planets);
-    }else{
-      for(const item in planets){
-      if(planets[item].name.includes(searchText)){
-        console.log(filtered);
-        newArray.push(planets[item]);
-      }
-    }
-    setFiltered(newArray);
-    }
-    
-  }
-
   return (
     <View style={styles.container}>
       {networkTextVisible && <Text style = {styles.connection}>No Connection Detected</Text>}
@@ -106,14 +82,8 @@ export default function Planets() {
         resizeMode="contain"
         source={source}
       />
-      <Input 
-        placeholder = "Search"
-        onChangeText = {(e) => {
-          searchFilter(e);
-        }}
-      />
       <ScrollView style = {styles.scroll}>
-        <FlatList data = {filtered} 
+        <FlatList data = {planets} 
           renderItem = {({item}) => 
             <Swipeable name = {item.name} key = {item.id} onSwipe = {onSwipe(item.name)}>
               <Text style = {styles.item} >{item.name}</Text>
